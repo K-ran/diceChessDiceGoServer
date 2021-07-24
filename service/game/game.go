@@ -22,3 +22,15 @@ func NewDiceChessGame(gameId string, p1 string, p2 string, dice int) *diceChessG
 	newGame := &diceChessGame{player{p1}, player{p2}, gameId, make([]diceStruct, 3)}
 	return newGame
 }
+
+func (game *diceChessGame) SetPlayer1(player1 player) {
+	game.Player1 = player1
+}
+
+func (game *diceChessGame) SetPlayer2(player2 player) {
+	game.Player2 = player2
+}
+
+func (game *diceChessGame) SetGameId(id string) {
+	game.GameId = id
+}
