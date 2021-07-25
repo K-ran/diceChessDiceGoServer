@@ -1,4 +1,4 @@
-package main
+package gamehandler
 
 import (
 	"encoding/json"

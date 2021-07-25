@@ -1,4 +1,4 @@
-package main
+package gamehandler
 
 // stores information about a single die
 type diceStruct struct {
