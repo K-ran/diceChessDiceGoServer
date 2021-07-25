@@ -1,4 +1,4 @@
-package KeyValueStore
+package keyvaluestore
 
 type KeyError struct {
 	ErrString string
@@ -12,7 +12,7 @@ func (err *KeyError) Error() string {
 type KeyValueStore interface {
 
 	// Sets a key value pair
-	Set(key string, value string)
+	Set(key string, value string) error
 
 	// Gets the value based on key
 	Get(key string) (string, error)
@@ -24,8 +24,8 @@ type KeyValueStore interface {
 	Delete(key string)
 
 	// Connect to database/store
-	Connect() error
+	Connect()
 
 	// Disconnect from database
-	Disconnect() error
+	Disconnect()
 }

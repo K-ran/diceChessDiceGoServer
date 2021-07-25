@@ -1,4 +1,4 @@
-package KeyValueStore
+package keyvaluestore
 
 import "testing"
 

@@ -1,4 +1,4 @@
-package KeyValueStore
+package keyvaluestore
 
 import (
 	"context"
@@ -42,10 +42,6 @@ func (s *RedisStore) Connect() {
 		Password: "",
 		DB:       0,
 	})
-
-	if s.rdb == nil {
-		panic("Cannot connect to db")
-	}
 }
 
 func (s *RedisStore) Disconnect() {
