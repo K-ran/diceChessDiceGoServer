@@ -12,13 +12,13 @@ func (err *KeyError) Error() string {
 type KeyValueStore interface {
 
 	// Sets a key value pair
-	Set(key string, value string) error
+	Set(key string, value string, ttl int) error
 
 	// Gets the value based on key
 	Get(key string) (string, error)
 
 	// Update existing key value
-	Update(key string, value string) (string, error)
+	Update(key string, value string, ttl int) (string, error)
 
 	// Delete key value store
 	Delete(key string)

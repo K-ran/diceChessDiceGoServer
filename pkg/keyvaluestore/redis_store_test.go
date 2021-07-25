@@ -4,7 +4,7 @@ import "testing"
 
 func TestRedisStore(t *testing.T) {
 	rdb := NewRedisStore()
-	if rdb.Set("name", "shyam") != nil {
+	if rdb.Set("name", "shyam", 20) != nil {
 		t.Fatal("Set Fail")
 	}
 
@@ -12,7 +12,7 @@ func TestRedisStore(t *testing.T) {
 		t.Fatal("Get Failed")
 	}
 
-	if _, err := rdb.Update("name", "ram"); err != nil {
+	if _, err := rdb.Update("name", "ram", 20); err != nil {
 		t.Fatal("Update failed")
 	}
 

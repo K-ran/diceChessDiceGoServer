@@ -9,8 +9,8 @@ type PrefixDecorator struct {
 }
 
 // Sets a key value pair
-func (wrp *PrefixDecorator) Set(key string, value string) error {
-	return wrp.wrappedObj.Set(wrp.prefix+key, value)
+func (wrp *PrefixDecorator) Set(key string, value string, ttl int) error {
+	return wrp.wrappedObj.Set(wrp.prefix+key, value, ttl)
 }
 
 // Gets the value based on key
@@ -19,8 +19,8 @@ func (wrp *PrefixDecorator) Get(key string) (string, error) {
 }
 
 // Update existing key value
-func (wrp *PrefixDecorator) Update(key string, value string) (string, error) {
-	return wrp.wrappedObj.Update(wrp.prefix+key, value)
+func (wrp *PrefixDecorator) Update(key string, value string, ttl int) (string, error) {
+	return wrp.wrappedObj.Update(wrp.prefix+key, value, ttl)
 }
 
 // Delete key value store

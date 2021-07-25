@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -20,13 +19,22 @@ var db keyvaluestore.KeyValueStore
 var game_db keyvaluestore.KeyValueStore
 var player_db keyvaluestore.KeyValueStore
 
+const DB_ENTRY_TLL int = 900 //15minutes
+
 func main() {
 
 	db = keyvaluestore.NewRedisStore()
-	game_db = storewrapper.NewPrefixDecorator(db, "game_")
-	player_db = storewrapper.NewPrefixDecorator(db, "player_")
+	game_db = storewrapper.NewTtlDeocrator(
+		storewrapper.NewPrefixDecorator(
+			db, "game_"), DB_ENTRY_TLL)
+
+	player_db = storewrapper.NewTtlDeocrator(
+		storewrapper.NewPrefixDecorator(
+			db, "player_"), DB_ENTRY_TLL)
+
+	game_db.Set("NAME", "KARAN", 0)
 	r := mux.NewRouter()
 	r.HandleFunc("/{name}", HomeHandler)
 	http.Handle("/", r)
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	//log.Fatal(http.ListenAndServe(":8081", nil))
 }

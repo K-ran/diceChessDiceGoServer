@@ -2,6 +2,7 @@ package keyvaluestore
 
 import (
 	"context"
+	"time"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -13,19 +14,18 @@ type RedisStore struct {
 	rdb *redis.Client
 }
 
-func (s *RedisStore) Set(key string, value string) error {
-	err := s.rdb.Set(ctx, key, value, 0).Err()
+func (s *RedisStore) Set(key string, value string, ttl int) error {
+	err := s.rdb.Set(ctx, key, value, time.Duration(ttl)*time.Second).Err()
 	return err
 }
 
 func (s *RedisStore) Get(key string) (string, error) {
-
 	return s.rdb.Get(ctx, key).Result()
 }
 
-func (s *RedisStore) Update(key string, value string) (string, error) {
+func (s *RedisStore) Update(key string, value string, ttl int) (string, error) {
 	if _, err := s.Get(key); err == nil {
-		s.Set(key, value)
+		s.Set(key, value, ttl)
 		return value, nil
 	} else {
 		return "", &KeyError{"Key not found"}
