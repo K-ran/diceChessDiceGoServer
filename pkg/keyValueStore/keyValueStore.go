@@ -1,4 +1,4 @@
-package main
+package KeyValueStore
 
 type KeyError struct {
 	ErrString string
@@ -9,20 +9,23 @@ func (err *KeyError) Error() string {
 }
 
 // Interface for a Game Storage unit.
-type GameStore interface {
+type KeyValueStore interface {
 
 	// Sets a key value pair
-	SetGame(key string, value string)
+	Set(key string, value string)
 
 	// Gets the value based on key
-	GetGame(key string) (string, error)
+	Get(key string) (string, error)
 
 	// Update existing key value
-	UpdateGame(key string, value string) (string, error)
+	Update(key string, value string) (string, error)
 
 	// Delete key value store
-	DeleteGame(key string)
+	Delete(key string)
 
 	// Connect to database/store
 	Connect() error
+
+	// Disconnect from database
+	Disconnect() error
 }
