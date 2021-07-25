@@ -1,4 +1,4 @@
-package main
+package storewrapper
 
 import "github.com/k-ran/diceChessDiceServer/pkg/keyvaluestore"
 
@@ -9,8 +9,8 @@ type PrefixDecorator struct {
 }
 
 // Sets a key value pair
-func (wrp *PrefixDecorator) Set(key string, value string) {
-	wrp.wrappedObj.Set(wrp.prefix+key, value)
+func (wrp *PrefixDecorator) Set(key string, value string) error {
+	return wrp.wrappedObj.Set(wrp.prefix+key, value)
 }
 
 // Gets the value based on key
@@ -38,7 +38,7 @@ func (wrp *PrefixDecorator) Disconnect() {
 	wrp.wrappedObj.Disconnect()
 }
 
-func NewPrefixWrapper(store keyvaluestore.KeyValueStore, prefix string) *PrefixDecorator {
+func NewPrefixDecorator(store keyvaluestore.KeyValueStore, prefix string) *PrefixDecorator {
 	instance := &PrefixDecorator{store, prefix}
 	return instance
 }
