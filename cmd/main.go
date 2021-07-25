@@ -5,8 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/k-ran/diceChessDiceServer/internal/storewrapper"
-	"github.com/k-ran/diceChessDiceServer/pkg/keyvaluestore"
+	"github.com/k-ran/diceChessDiceServer/gamehandler"
 )
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -15,24 +14,8 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello %s\n", info["name"])
 }
 
-var db keyvaluestore.KeyValueStore
-var game_db keyvaluestore.KeyValueStore
-var player_db keyvaluestore.KeyValueStore
-
-const DB_ENTRY_TLL int = 900 //15minutes
-
 func main() {
-
-	db = keyvaluestore.NewRedisStore()
-	game_db = storewrapper.NewTtlDeocrator(
-		storewrapper.NewPrefixDecorator(
-			db, "game_"), DB_ENTRY_TLL)
-
-	player_db = storewrapper.NewTtlDeocrator(
-		storewrapper.NewPrefixDecorator(
-			db, "player_"), DB_ENTRY_TLL)
-
-	game_db.Set("NAME", "KARAN", 0)
+	gamehandler.InitDb()
 	r := mux.NewRouter()
 	r.HandleFunc("/{name}", HomeHandler)
 	http.Handle("/", r)
