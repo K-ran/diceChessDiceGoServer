@@ -2,9 +2,10 @@ package keyvaluestore
 
 import (
 	"context"
+	"log"
 	"time"
 
-	"github.com/go-redis/redis/v8"
+	redis "github.com/go-redis/redis/v8"
 )
 
 var ctx = context.Background()
@@ -42,6 +43,12 @@ func (s *RedisStore) Connect() {
 		Password: "",
 		DB:       0,
 	})
+
+	if s.rdb == nil {
+		panic("Not able to connect to Redis")
+	} else {
+		log.Printf("Connect to Redis.\n")
+	}
 }
 
 func (s *RedisStore) Disconnect() {

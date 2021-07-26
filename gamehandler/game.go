@@ -10,16 +10,25 @@ type player struct {
 	Name string `json:"name"`
 }
 
+type GameState int
+
+const (
+	WAITING GameState = iota
+	RUNNING
+)
+
 //stores state of the game
 type diceChessGame struct {
-	Player1 player       `json:"p1"`
-	Player2 player       `json:"p2"`
-	GameId  string       `json:"gameID"`
-	Dice    []diceStruct `json:"dice"`
+	Player1  player       `json:"p1"`
+	Player2  player       `json:"p2"`
+	GameId   string       `json:"gameID"`
+	GameName string       `json:gameName`
+	state    GameState    `json:gameState`
+	Dice     []diceStruct `json:"dice"`
 }
 
-func NewDiceChessGame(gameId string, p1 string, p2 string, dice int) *diceChessGame {
-	newGame := &diceChessGame{player{p1}, player{p2}, gameId, make([]diceStruct, 3)}
+func NewDiceChessGame(gameId string, gameName string, p1 string, p2 string, dice int) *diceChessGame {
+	newGame := &diceChessGame{player{p1}, player{p2}, gameId, gameName, WAITING, make([]diceStruct, 3)}
 	return newGame
 }
 

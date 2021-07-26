@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gorilla/mux"
 	"github.com/k-ran/diceChessDiceServer/gamehandler"
@@ -17,7 +19,14 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	gamehandler.InitDb()
 	r := mux.NewRouter()
-	r.HandleFunc("/{name}", HomeHandler)
+	r.HandleFunc("/create/{playerName}/{gameName}/{dieNum}", gamehandler.GetCreateHttpHandler()).Methods("GET")
 	http.Handle("/", r)
-	//log.Fatal(http.ListenAndServe(":8081", nil))
+
+	address := os.Getenv("GO_PORT")
+	if address == "" {
+		address = "8081"
+	}
+
+	log.Println("Server starting at port " + address)
+	log.Fatal(http.ListenAndServe(":"+address, nil))
 }
