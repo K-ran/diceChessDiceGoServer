@@ -1,7 +1,6 @@
 package gamehandler
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -79,11 +78,7 @@ func inputCreateCheck(s http.HandlerFunc) http.HandlerFunc {
 		}
 
 		if foundError > 0 {
-			resp := make(map[string]string)
-			resp["status"] = "bad"
-			resp["Errors"] = errorString
-			rw.Header().Add("Content-Type", "application/json")
-			json.NewEncoder(rw).Encode(resp)
+			ReturnFailure(rw, errorString)
 		} else {
 			s.ServeHTTP(rw, r)
 		}

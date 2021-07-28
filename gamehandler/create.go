@@ -54,8 +54,14 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	playerName := params["playerName"]
 	dieNum, _ := strconv.Atoi(params["dieNum"])
 	playerId := storewrapper.GreateUniquePlayerId(player_db)
-	gameId := storewrapper.GreateUniquePlayerId(game_db)
+	gameId := storewrapper.GreateUniqueGameId(game_db)
+	game := NewDiceChessGame(gameId, gameName, playerName, "", dieNum)
+	value, err := json.Marshal(game)
+	if err != nil {
+		log.Println("Failed to parse inputs")
+		ReturnFailure(w, "Failed to parse inputs")
+	}
+	game_db.Set(gameId, string(value), 0)
 	resp := createResponse{0, gameId, playerId, gameName, playerName, int(WAITING), dieNum}
 	json.NewEncoder(w).Encode(resp)
-	// w.Write([]byte("hi"))
 }
