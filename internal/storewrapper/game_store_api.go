@@ -9,6 +9,7 @@ import (
 	"github.com/k-ran/diceChessDiceServer/pkg/keyvaluestore"
 )
 
+// Generates base64 random string of length n
 func generateRandomString(n int) (string, error) {
 	const letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz-_"
 	ret := make([]byte, n)

@@ -18,6 +18,7 @@ var player_db keyvaluestore.KeyValueStore
 
 const DB_ENTRY_TLL int = 900 //15minutes
 
+// Initilize the databases
 func InitDb() {
 	db = keyvaluestore.NewRedisStore()
 	game_db = storewrapper.NewTtlDeocrator(
@@ -39,10 +40,12 @@ type createResponse struct {
 	DieNum     int    `json:"dieNum"`
 }
 
+// Generate the Create the http handler and return
 func GetCreateHttpHandler() http.HandlerFunc {
-	return http.HandlerFunc(CreateHandler)
+	return inputCreateCheck(http.HandlerFunc(CreateHandler))
 }
 
+// Actual create handler function
 func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("CreateHandler Called...\n")
 	w.Header().Add("Content-Type", "application/json")
