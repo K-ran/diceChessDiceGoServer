@@ -1,6 +1,7 @@
-package gamehandler
+package middleware
 
 import (
+	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -10,6 +11,15 @@ import (
 const GAME_NAME_LENGTH = 128
 const PLAYER_NAME_LENGTH = 128
 const MAX_DIE_VALUE = 3
+
+//Create a failure response status
+func ReturnFailure(rw http.ResponseWriter, err string) {
+	resp := make(map[string]string)
+	resp["status"] = "1"
+	resp["Errors"] = err
+	rw.Header().Add("Content-Type", "application/json")
+	json.NewEncoder(rw).Encode(resp)
+}
 
 //Checks string for aplhanumeric characters
 func isAlphaNumeric(str string) bool {
@@ -39,7 +49,7 @@ func isAlpha(str string) bool {
 }
 
 // Middleware to check the input for create api
-func inputCreateCheck(s http.HandlerFunc) http.HandlerFunc {
+func InputCreateCheck(s http.HandlerFunc) http.HandlerFunc {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		foundError := 0
 		errorString := ""
@@ -66,6 +76,32 @@ func inputCreateCheck(s http.HandlerFunc) http.HandlerFunc {
 			foundError++
 			errorString += "Game name should be alphanumeric."
 		}
+
+		if len(playerName) > PLAYER_NAME_LENGTH || len(playerName) <= 0 {
+			foundError++
+			errorString += "Invalid game name length."
+		}
+
+		if !isAlpha(playerName) {
+			foundError++
+			errorString += "Game name should have only alphabets."
+		}
+
+		if foundError > 0 {
+			ReturnFailure(rw, errorString)
+		} else {
+			s.ServeHTTP(rw, r)
+		}
+	})
+}
+
+// Middleware to check the input for join api
+func InputJoinCheck(s http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		foundError := 0
+		errorString := ""
+		params := mux.Vars(r)
+		playerName := params["playerName"]
 
 		if len(playerName) > PLAYER_NAME_LENGTH || len(playerName) <= 0 {
 			foundError++

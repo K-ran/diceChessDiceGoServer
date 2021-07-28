@@ -23,7 +23,7 @@ type diceChessGame struct {
 	Player2  player       `json:"p2"`
 	GameId   string       `json:"gameID"`
 	GameName string       `json:gameName`
-	state    GameState    `json:gameState`
+	State    GameState    `json:gameState`
 	Dice     []diceStruct `json:"dice"`
 }
 

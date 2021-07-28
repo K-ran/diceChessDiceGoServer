@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/k-ran/diceChessDiceServer/internal/storewrapper"
+	"github.com/k-ran/diceChessDiceServer/middleware"
 )
 
 var db keyvaluestore.KeyValueStore
@@ -30,23 +31,25 @@ func InitDb() {
 			db, "player_"), DB_ENTRY_TLL)
 }
 
+// response for create api
 type createResponse struct {
-	Status     int    `json:"status"`
+	Status     string `json:"status"`
 	GameId     string `json:"gameId"`
 	PlayerId   string `json:"playerId"`
 	GameName   string `json:"gameName"`
 	PlayerName string `json:"playerName"`
 	State      int    `json:"state"`
-	DieNum     int    `json:"dieNum"`
+	DieNum     string `json:"dieNum"`
 }
 
 // Generate the Create the http handler and return
 func GetCreateHttpHandler() http.HandlerFunc {
-	return inputCreateCheck(http.HandlerFunc(CreateHandler))
+	return middleware.InputCreateCheck(
+		http.HandlerFunc(createHandler))
 }
 
 // Actual create handler function
-func CreateHandler(w http.ResponseWriter, r *http.Request) {
+func createHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("CreateHandler Called...\n")
 	w.Header().Add("Content-Type", "application/json")
 	params := mux.Vars(r)
@@ -60,8 +63,9 @@ func CreateHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Failed to parse inputs")
 		ReturnFailure(w, "Failed to parse inputs")
+		return
 	}
 	game_db.Set(gameId, string(value), 0)
-	resp := createResponse{0, gameId, playerId, gameName, playerName, int(WAITING), dieNum}
+	resp := createResponse{"0", gameId, playerId, gameName, playerName, int(WAITING), strconv.Itoa(dieNum)}
 	json.NewEncoder(w).Encode(resp)
 }
