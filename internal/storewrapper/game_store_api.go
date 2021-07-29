@@ -30,7 +30,7 @@ const GAME_ID_LENGTH = 7
 const PLAYER_ID_LENGTH = 32
 
 //Generates a unique player id in store
-func GreateUniquePlayerId(store keyvaluestore.KeyValueStore) string {
+func GreateUniquePlayerId(store keyvaluestore.KeyValueStore, gameId string) string {
 	value, _ := generateRandomString(PLAYER_ID_LENGTH)
 	player_mu.Lock()
 	defer player_mu.Unlock()
@@ -43,7 +43,7 @@ func GreateUniquePlayerId(store keyvaluestore.KeyValueStore) string {
 		_, err = store.Get(value)
 	}
 
-	store.Set(value, "", 0)
+	store.Set(value, gameId, 0)
 
 	return value
 }

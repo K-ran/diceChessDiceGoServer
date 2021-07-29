@@ -20,8 +20,8 @@ func (wrp *TtlDecoratorr) Set(key string, value string, ttl int) error {
 // Gets the value based on key, updated ttl as well
 func (wrp *TtlDecoratorr) Get(key string) (string, error) {
 	value, err := wrp.wrappedObj.Get(key)
-	if err != nil {
-		wrp.Set(key, value, 0)
+	if err == nil {
+		wrp.Set(key, value, wrp.ttl)
 	}
 	return value, err
 }

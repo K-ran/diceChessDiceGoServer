@@ -22,7 +22,7 @@ func main() {
 
 	r.HandleFunc("/create/{playerName}/{gameName}/{dieNum}", gamehandler.GetCreateHttpHandler()).Methods("POST")
 	r.HandleFunc("/join/{playerName}/{gameId}", gamehandler.GetJoinHandler()).Methods("POST")
-	r.HandleFunc("/getstatus/{playerId}/{gameId}", gamehandler.GetJoinHandler()).Methods("GET")
+	r.HandleFunc("/getstatus/{playerId}/{gameId}", gamehandler.GetGetStatusHandler()).Methods("GET")
 	http.Handle("/", r)
 
 	address := os.Getenv("GO_PORT")

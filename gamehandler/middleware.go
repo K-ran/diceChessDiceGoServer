@@ -13,7 +13,7 @@ func checkValidPlayer(s http.HandlerFunc) http.HandlerFunc {
 		playerId := params["playerId"]
 		_, err := player_db.Get(playerId)
 		if err != nil {
-			ReturnFailure(rw, "Invalid player id")
+			ReturnFailure(rw, "Invalid player id.")
 			return
 		}
 		s.ServeHTTP(rw, r)
@@ -27,7 +27,7 @@ func checkValidGame(s http.HandlerFunc) http.HandlerFunc {
 		gameId := params["gameId"]
 		_, err := game_db.Get(gameId)
 		if err != nil {
-			ReturnFailure(rw, "Invalid player id")
+			ReturnFailure(rw, "Invalid game id.")
 			return
 		}
 		s.ServeHTTP(rw, r)

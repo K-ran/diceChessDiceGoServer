@@ -19,16 +19,17 @@ const (
 
 //stores state of the game
 type diceChessGame struct {
+	RespType int          `json:"type"` //type of response
 	Player1  player       `json:"p1"`
 	Player2  player       `json:"p2"`
 	GameId   string       `json:"gameID"`
-	GameName string       `json:gameName`
-	State    GameState    `json:gameState`
+	GameName string       `json:"gameName"`
+	State    GameState    `json:"gameState"`
 	Dice     []diceStruct `json:"dice"`
 }
 
 func NewDiceChessGame(gameId string, gameName string, p1 string, p2 string, dice int) *diceChessGame {
-	newGame := &diceChessGame{player{p1}, player{p2}, gameId, gameName, WAITING, make([]diceStruct, 3)}
+	newGame := &diceChessGame{RESPONSE_GAME, player{p1}, player{p2}, gameId, gameName, WAITING, make([]diceStruct, 3)}
 	return newGame
 }
 

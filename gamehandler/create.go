@@ -33,7 +33,7 @@ func InitDb() {
 
 // response for create api
 type createResponse struct {
-	Status     string `json:"status"`
+	RespType   int    `json:"type"` //type of response
 	GameId     string `json:"gameId"`
 	PlayerId   string `json:"playerId"`
 	GameName   string `json:"gameName"`
@@ -56,16 +56,16 @@ func createHandler(w http.ResponseWriter, r *http.Request) {
 	gameName := params["gameName"]
 	playerName := params["playerName"]
 	dieNum, _ := strconv.Atoi(params["dieNum"])
-	playerId := storewrapper.GreateUniquePlayerId(player_db)
 	gameId := storewrapper.GreateUniqueGameId(game_db)
+	playerId := storewrapper.GreateUniquePlayerId(player_db, gameId)
 	game := NewDiceChessGame(gameId, gameName, playerName, "", dieNum)
 	value, err := json.Marshal(game)
 	if err != nil {
-		log.Println("Failed to parse inputs")
-		ReturnFailure(w, "Failed to parse inputs")
+		log.Println("Failed to parse inputs.")
+		ReturnFailure(w, "Failed to parse inputs.")
 		return
 	}
 	game_db.Set(gameId, string(value), 0)
-	resp := createResponse{"0", gameId, playerId, gameName, playerName, int(WAITING), strconv.Itoa(dieNum)}
+	resp := createResponse{RESPONSE_CREATE, gameId, playerId, gameName, playerName, int(WAITING), strconv.Itoa(dieNum)}
 	json.NewEncoder(w).Encode(resp)
 }

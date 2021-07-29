@@ -14,7 +14,7 @@ import (
 
 //response for join api
 type joinResponse struct {
-	Status     string `json:"status"`
+	RespType   int    `json:"type"` //type of response
 	GameId     string `json:"gameId"`
 	PlayerId   string `json:"playerId"`
 	GameName   string `json:"gameName"`
@@ -37,6 +37,7 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.Unmarshal([]byte(gameString), &game)
 	if err != nil {
 		ReturnFailure(w, "Found invalid game data.")
+		return
 	}
 
 	//populate the missing data in the game structure
@@ -49,12 +50,12 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//generate new player id
-	playerId := storewrapper.GreateUniquePlayerId(player_db)
+	playerId := storewrapper.GreateUniquePlayerId(player_db, gameId)
 
 	value, err := json.Marshal(game)
 	if err != nil {
 		log.Println("Failed to parse inputs")
-		ReturnFailure(w, "Failed to parse inputs")
+		ReturnFailure(w, "Failed to parse inputs.")
 		return
 	}
 
@@ -62,6 +63,6 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 	game_db.Set(gameId, string(value), 0)
 
 	//return response
-	resp := joinResponse{"0", gameId, playerId, game.GameName, playerName, strconv.Itoa(len(game.Dice))}
+	resp := joinResponse{RESPONSE_JOIN, gameId, playerId, game.GameName, playerName, strconv.Itoa(len(game.Dice))}
 	json.NewEncoder(w).Encode(resp)
 }
