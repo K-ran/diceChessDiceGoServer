@@ -1,6 +1,8 @@
 package gamehandler
 
 import (
+	"github.com/k-ran/diceChessDiceServer/middleware"
+
 	"encoding/json"
 	"log"
 	"net/http"
@@ -10,7 +12,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/k-ran/diceChessDiceServer/internal/storewrapper"
-	"github.com/k-ran/diceChessDiceServer/middleware"
 )
 
 var db keyvaluestore.KeyValueStore
@@ -44,12 +45,18 @@ type createResponse struct {
 
 // Generate the Create the http handler and return
 func GetCreateHttpHandler() http.HandlerFunc {
-	return middleware.InputCreateCheck(
-		http.HandlerFunc(createHandler))
+	return allowCORS(
+		validateReCaptcha(
+			middleware.InputCreateCheck(
+				http.HandlerFunc(createHandler)),
+		),
+		"*")
+
 }
 
 // Actual create handler function
 func createHandler(w http.ResponseWriter, r *http.Request) {
+
 	log.Printf("CreateHandler Called...\n")
 	w.Header().Add("Content-Type", "application/json")
 	params := mux.Vars(r)

@@ -20,10 +20,10 @@ func main() {
 	gamehandler.InitDb()
 	r := mux.NewRouter()
 
-	r.HandleFunc("/create/{playerName}/{gameName}/{dieNum}", gamehandler.GetCreateHttpHandler()).Methods("POST")
-	r.HandleFunc("/join/{playerName}/{gameId}", gamehandler.GetJoinHandler()).Methods("POST")
-	r.HandleFunc("/getstatus/{playerId}/{gameId}", gamehandler.GetGetStatusHandler()).Methods("GET")
-	r.HandleFunc("/roll/{playerId}/{gameId}", gamehandler.GetRollHandler()).Methods("GET")
+	r.HandleFunc("/create/{playerName}/{gameName}/{dieNum}", gamehandler.GetCreateHttpHandler()).Methods("POST", "OPTIONS")
+	r.HandleFunc("/join/{gameId}/{playerName}", gamehandler.GetJoinHandler()).Methods("POST")
+	r.HandleFunc("/getstatus/{gameId}/{playerId}", gamehandler.GetGetStatusHandler()).Methods("GET")
+	r.HandleFunc("/roll/{gameId}/{playerId}", gamehandler.GetRollHandler()).Methods("GET")
 	http.Handle("/", r)
 
 	address := os.Getenv("GO_PORT")
