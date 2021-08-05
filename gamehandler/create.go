@@ -1,4 +1,5 @@
 package gamehandler
+import { withRouter } from 'react-router-dom' 
 
 import (
 	"github.com/k-ran/diceChessDiceServer/middleware"
