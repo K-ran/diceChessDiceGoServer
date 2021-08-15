@@ -23,7 +23,7 @@ type joinResponse struct {
 }
 
 func GetJoinHandler() http.HandlerFunc {
-	return middleware.InputJoinCheck(http.HandlerFunc(joinHandler))
+	return allowCORS(middleware.InputJoinCheck(http.HandlerFunc(joinHandler)), "*")
 }
 
 // handles joining of a game
