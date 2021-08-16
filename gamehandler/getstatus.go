@@ -9,7 +9,7 @@ import (
 
 //response for join api
 func GetGetStatusHandler() http.HandlerFunc {
-	return checkValidPlayer(checkValidGame(http.HandlerFunc(getStatusHandler)))
+	return allowCORS((checkValidGame(http.HandlerFunc(getStatusHandler))), "*")
 }
 
 // handles joining of a game
