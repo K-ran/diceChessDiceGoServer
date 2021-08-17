@@ -32,7 +32,7 @@ type diceChessGame struct {
 	RespType  int          `json:"type"` //type of response
 	Player1   player       `json:"p1"`
 	Player2   player       `json:"p2"`
-	GameId    string       `json:"gameID"`
+	GameId    string       `json:"gameId"`
 	GameName  string       `json:"gameName"`
 	State     GameState    `json:"gameState"`
 	Dice      []diceStruct `json:"dice"`
