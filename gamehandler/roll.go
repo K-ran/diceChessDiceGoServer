@@ -9,12 +9,13 @@ import (
 
 //response for join api
 type rollResponse struct {
-	RespType int          `json:"type"` //type of response
-	Dies     []diceStruct `json:"dice"`
+	RespType  int          `json:"type"` //type of response
+	Dies      []diceStruct `json:"dice"`
+	RollCount int          `json:"rollCount"`
 }
 
 func GetRollHandler() http.HandlerFunc {
-	return checkValidPlayer(checkValidGame(http.HandlerFunc(rollHandler)))
+	return allowCORS((checkValidGame(http.HandlerFunc(rollHandler))), "*")
 }
 
 // handles joining of a game
@@ -48,6 +49,6 @@ func rollHandler(w http.ResponseWriter, r *http.Request) {
 	value, _ := json.Marshal(game)
 	//save the game state
 	game_db.Set(gameId, string(value), 0)
-
-	json.NewEncoder(w).Encode(game)
+	rollResp := rollResponse{RESPONSE_ROLL, game.Dice, game.RollCount}
+	json.NewEncoder(w).Encode(rollResp)
 }

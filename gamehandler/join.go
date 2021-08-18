@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/k-ran/diceChessDiceServer/middleware"
 
@@ -14,12 +13,9 @@ import (
 
 //response for join api
 type joinResponse struct {
-	RespType   int    `json:"type"` //type of response
-	GameId     string `json:"gameId"`
-	PlayerId   string `json:"playerId"`
-	GameName   string `json:"gameName"`
-	PlayerName string `json:"playerName"`
-	DieNum     string `json:"dieNum"`
+	RespType  int           `json:"type"` //type of response
+	PlayerId  string        `json:"playerId"`
+	GameState diceChessGame `json:"gameState"`
 }
 
 func GetJoinHandler() http.HandlerFunc {
@@ -63,6 +59,6 @@ func joinHandler(w http.ResponseWriter, r *http.Request) {
 	game_db.Set(gameId, string(value), 0)
 
 	//return response
-	resp := joinResponse{RESPONSE_JOIN, gameId, playerId, game.GameName, playerName, strconv.Itoa(len(game.Dice))}
+	resp := joinResponse{RESPONSE_JOIN, playerId, game}
 	json.NewEncoder(w).Encode(resp)
 }

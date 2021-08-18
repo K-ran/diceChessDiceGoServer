@@ -40,7 +40,7 @@ type diceChessGame struct {
 }
 
 func NewDiceChessGame(gameId string, gameName string, p1 string, p2 string, dice int) *diceChessGame {
-	newGame := &diceChessGame{RESPONSE_GAME, player{p1}, player{p2}, gameId, gameName, WAITING, make([]diceStruct, 3), 0}
+	newGame := &diceChessGame{RESPONSE_GAME, player{p1}, player{p2}, gameId, gameName, WAITING, make([]diceStruct, dice), 0}
 	return newGame
 }
 
